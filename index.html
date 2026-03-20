@@ -262,6 +262,10 @@ main{flex:1;padding:24px;overflow-y:auto;max-height:calc(100vh - 60px);}
 .lootbox-card.lb-rare{border-color:#2196f3;}
 .lootbox-card.lb-epic{border-color:#9c27b0;}
 .lootbox-card.lb-legendary{border-color:#ff9800;box-shadow:0 0 15px rgba(255,152,0,0.2);}
+.lootbox-card.lb-mystic{border-color:#00e5ff;box-shadow:0 0 15px rgba(0,229,255,0.25);}
+.lootbox-card.lb-divine{border-color:#e040fb;box-shadow:0 0 20px rgba(224,64,251,0.3);}
+.lootbox-card.lb-celestial{border-color:#ffd740;box-shadow:0 0 25px rgba(255,215,64,0.35);}
+.lootbox-card.lb-omega{border-color:#ff1744;box-shadow:0 0 30px rgba(255,23,68,0.4);background:linear-gradient(135deg,#1a0a0a,#2a0a1a);}
 .lootbox-opening{text-align:center;padding:30px;}
 .lootbox-opening .lb-box-anim{font-size:5em;animation:lbShake 0.5s infinite;}
 @keyframes lbShake{0%,100%{transform:rotate(-3deg);}25%{transform:rotate(3deg);}50%{transform:rotate(-3deg);}75%{transform:rotate(3deg);}}
@@ -281,6 +285,7 @@ main{flex:1;padding:24px;overflow-y:auto;max-height:calc(100vh - 60px);}
 .race-lane{display:flex;align-items:center;height:40px;margin:4px 0;position:relative;border-bottom:1px dashed rgba(255,255,255,0.06);}
 .race-lane:last-child{border-bottom:none;}
 .race-lane .lane-car{position:absolute;left:0;transition:left 0.15s linear;font-size:1.4em;z-index:2;}
+.race-lane .lane-pos{position:absolute;left:0;top:50%;transform:translateY(-50%);font-size:1.2em;z-index:3;pointer-events:none;transition:left 0.15s linear;}
 .race-lane .lane-smoke{position:absolute;left:-8px;top:50%;transform:translateY(-50%);font-size:1.3em;opacity:1;z-index:1;pointer-events:none;transition:left 0.15s linear,opacity 0.08s;white-space:nowrap;letter-spacing:-1px;filter:blur(0.5px);}
 .race-lane .lane-name{position:absolute;left:0;top:-1px;font-size:0.65em;color:var(--muted);white-space:nowrap;z-index:1;transition:left 0.15s linear;}
 .race-lane .lane-bg{position:absolute;left:0;right:0;top:0;bottom:0;background:repeating-linear-gradient(90deg,transparent,transparent 40px,rgba(255,255,255,0.02) 40px,rgba(255,255,255,0.02) 42px);}
@@ -1139,7 +1144,7 @@ function minesCalcMultiplier(revealed, mineCount) {
   for (let i = 0; i < revealed; i++) {
     mult *= (25 - i) / (25 - mineCount - i);
   }
-  return Math.round(mult * 0.96 * 100) / 100; // 4% house edge
+  return Math.round(mult * 0.99 * 100) / 100; // 1% house edge
 }
 
 function minesClick(i) {
@@ -1477,37 +1482,37 @@ function rouletteResolve(result, isRed, color, bet) {
 // ============== WHEEL SPIN ==============
 const wheelRiskSegments = {
   low: [
-    { label: '0x', mult: 0, color: '#c62828', weight: 4.5 },
-    { label: '0.5x', mult: 0.5, color: '#e65100', weight: 14 },
-    { label: '1x', mult: 1, color: '#2e7d32', weight: 30 },
-    { label: '1.2x', mult: 1.2, color: '#1565c0', weight: 26 },
-    { label: '1.5x', mult: 1.5, color: '#6a1b9a', weight: 15.5 },
-    { label: '2x', mult: 2, color: '#00838f', weight: 7.5 },
-    { label: '3x', mult: 3, color: '#f9a825', weight: 2.5 },
+    { label: '0x', mult: 0, color: '#c62828', weight: 15 },
+    { label: '0.5x', mult: 0.5, color: '#e65100', weight: 15 },
+    { label: '1x', mult: 1, color: '#2e7d32', weight: 28 },
+    { label: '1.2x', mult: 1.2, color: '#1565c0', weight: 22 },
+    { label: '1.5x', mult: 1.5, color: '#6a1b9a', weight: 12 },
+    { label: '2x', mult: 2, color: '#00838f', weight: 5.5 },
+    { label: '3x', mult: 3, color: '#f9a825', weight: 2 },
     { label: '5x', mult: 5, color: '#ad1457', weight: 0.5 },
   ],
   medium: [
-    { label: '0x', mult: 0, color: '#c62828', weight: 11 },
-    { label: '0.5x', mult: 0.5, color: '#e65100', weight: 17 },
-    { label: '1x', mult: 1, color: '#2e7d32', weight: 22 },
-    { label: '1.5x', mult: 1.5, color: '#1565c0', weight: 19 },
-    { label: '2x', mult: 2, color: '#6a1b9a', weight: 14.5 },
-    { label: '3x', mult: 3, color: '#00838f', weight: 7.5 },
-    { label: '5x', mult: 5, color: '#f9a825', weight: 4.5 },
-    { label: '10x', mult: 10, color: '#ad1457', weight: 2.5 },
-    { label: '50x', mult: 50, color: '#ff6f00', weight: 0.5 },
+    { label: '0x', mult: 0, color: '#c62828', weight: 30 },
+    { label: '0.5x', mult: 0.5, color: '#e65100', weight: 20 },
+    { label: '1x', mult: 1, color: '#2e7d32', weight: 21 },
+    { label: '1.5x', mult: 1.5, color: '#1565c0', weight: 13 },
+    { label: '2x', mult: 2, color: '#6a1b9a', weight: 8.5 },
+    { label: '3x', mult: 3, color: '#00838f', weight: 4 },
+    { label: '5x', mult: 5, color: '#f9a825', weight: 2 },
+    { label: '10x', mult: 10, color: '#ad1457', weight: 0.8 },
+    { label: '50x', mult: 50, color: '#ff6f00', weight: 0.03 },
   ],
   high: [
-    { label: '0x', mult: 0, color: '#c62828', weight: 28 },
-    { label: '0.2x', mult: 0.2, color: '#e65100', weight: 19 },
-    { label: '0.5x', mult: 0.5, color: '#795548', weight: 15 },
-    { label: '1x', mult: 1, color: '#2e7d32', weight: 11 },
-    { label: '2x', mult: 2, color: '#1565c0', weight: 9 },
-    { label: '5x', mult: 5, color: '#6a1b9a', weight: 6.5 },
-    { label: '10x', mult: 10, color: '#00838f', weight: 4.5 },
-    { label: '25x', mult: 25, color: '#f9a825', weight: 3 },
-    { label: '50x', mult: 50, color: '#ad1457', weight: 2 },
-    { label: '100x', mult: 100, color: '#ff6f00', weight: 1 },
+    { label: '0x', mult: 0, color: '#c62828', weight: 57 },
+    { label: '0.2x', mult: 0.2, color: '#e65100', weight: 15 },
+    { label: '0.5x', mult: 0.5, color: '#795548', weight: 10 },
+    { label: '1x', mult: 1, color: '#2e7d32', weight: 7 },
+    { label: '2x', mult: 2, color: '#1565c0', weight: 4.5 },
+    { label: '5x', mult: 5, color: '#6a1b9a', weight: 3.5 },
+    { label: '10x', mult: 10, color: '#00838f', weight: 1.9 },
+    { label: '25x', mult: 25, color: '#f9a825', weight: 0.8 },
+    { label: '50x', mult: 50, color: '#ad1457', weight: 0.25 },
+    { label: '100x', mult: 100, color: '#ff6f00', weight: 0.07 },
   ]
 };
 let wheelSegments = wheelRiskSegments.medium;
@@ -1728,7 +1733,7 @@ function diceUpdateInfo() {
   const over = document.getElementById('dicePredict').value === 'over';
   document.getElementById('diceThreshVal').textContent = threshold;
   const chance = diceCalcChance(threshold, over);
-  const payout = Math.round(0.96 / chance * 100) / 100;
+  const payout = Math.round(0.99 / chance * 100) / 100;
   document.getElementById('diceChance').textContent = (chance * 100).toFixed(1) + '%';
   document.getElementById('dicePayout').textContent = payout.toFixed(2) + 'x';
   // Update threshold bar
@@ -1785,7 +1790,7 @@ function diceRoll() {
 function diceResolve(total, threshold, over, bet) {
   const won = over ? total > threshold : total < threshold;
   const chance = diceCalcChance(threshold, over);
-  const payout = Math.round(0.96 / chance * 100) / 100;
+  const payout = Math.round(0.99 / chance * 100) / 100;
 
   if (won) {
     const winnings = Math.round(bet * payout * 100) / 100;
@@ -1983,7 +1988,7 @@ function plinkoResolve(mults, pos, bet) {
 // ============== SIMPLE SLOTS ==============
 const slotSymbols = ['🍒', '🍋', '🍊', '🍉', '⭐', '💎', '7️⃣', '🔔'];
 const slotPayouts = {
-  '7️⃣': 18, '💎': 12, '⭐': 8, '🔔': 5.5, '🍉': 4.5, '🍊': 3.2, '🍋': 2.2, '🍒': 1.5
+  '7️⃣': 25, '💎': 18, '⭐': 12, '🔔': 8, '🍉': 7, '🍊': 5, '🍋': 3.5, '🍒': 2.5
 };
 function render_slots() {
   const area = document.getElementById('gameArea');
@@ -2000,7 +2005,7 @@ function render_slots() {
       ${Object.entries(slotPayouts).map(([s, p]) =>
         `<div class="payout-row"><span>${s} ${s} ${s}</span><span>${p}x</span></div>`
       ).join('')}
-      <div class="payout-row"><span>Any 2 matching</span><span>1.2x</span></div>
+      <div class="payout-row"><span>Any 2 matching</span><span>1.5x</span></div>
     </div>`;
 }
 
@@ -2049,7 +2054,7 @@ function slotsSpin() {
       showToast('JACKPOT! +£' + formatNum(winnings), 'win');
     } else if (results[0] === results[1] || results[1] === results[2] || results[0] === results[2]) {
       // Two of a kind
-      const mult = 1.2;
+      const mult = 1.5;
       const winnings = Math.round(bet * mult * 100) / 100;
       const profit = Math.round((winnings - bet) * 100) / 100;
       updateBalance(winnings);
@@ -2078,7 +2083,7 @@ function render_coinflip() {
     </div>
     <div class="coin-display" id="coinDisplay">🪙</div>
     <div id="coinResult"></div>
-    <div style="color:var(--muted);font-size:0.85em;text-align:center;margin-top:8px;">Payout: 1.92x | Win chance: 50%</div>`;
+    <div style="color:var(--muted);font-size:0.85em;text-align:center;margin-top:8px;">Payout: 1.98x | Win chance: 50%</div>`;
 }
 
 function coinFlip(choice) {
@@ -2093,7 +2098,7 @@ function coinFlip(choice) {
     coinEl.textContent = result === 'heads' ? '👑' : '🦅';
     const won = choice === result;
     if (won) {
-      const winnings = Math.round(bet * 1.92 * 100) / 100;
+      const winnings = Math.round(bet * 1.98 * 100) / 100;
       const profit = Math.round((winnings - bet) * 100) / 100;
       updateBalance(winnings);
       document.getElementById('coinResult').innerHTML =
@@ -2141,7 +2146,7 @@ function crashStart() {
     crashPoint = Math.round((25 + Math.random() * 75) * 100) / 100;
   } else {
     const r = Math.max(0.001, Math.random());
-    crashPoint = Math.max(1.01, Math.round(0.96 / (1 - r) * 100) / 100);
+    crashPoint = Math.max(1.01, Math.round(0.99 / (1 - r) * 100) / 100);
   }
   crashState = { active: true, multiplier: 1, bet, crashPoint, interval: null };
   document.getElementById('crashStart').style.display = 'none';
@@ -2278,7 +2283,7 @@ function hiloGuess(guess) {
 
   if (correct) {
     hiloState.streak++;
-    hiloState.winnings = Math.round(hiloState.winnings * 1.45 * 100) / 100;
+    hiloState.winnings = Math.round(hiloState.winnings * 1.48 * 100) / 100;
     hiloState.current = next;
     document.getElementById('hiloStreak').textContent = hiloState.streak;
     document.getElementById('hiloPot').textContent = '£' + formatNum(hiloState.winnings);
@@ -2333,11 +2338,11 @@ function crossCalcMult(diff, row) {
   const safeChance = d.safePerRow / d.paths;
   let mult = 1;
   for (let i = 0; i < row; i++) mult *= (1 / safeChance);
-  let edge = 0.96;
-  if (diff === 'medium' && row > 3) edge -= (row - 3) * 0.02;
-  if (diff === 'hard' && row > 3) edge -= (row - 3) * 0.03;
-  if (diff === 'extreme' && row > 3) edge -= (row - 3) * 0.035;
-  edge = Math.max(edge, 0.72);
+  let edge = 0.99;
+  if (diff === 'medium' && row > 3) edge -= (row - 3) * 0.01;
+  if (diff === 'hard' && row > 3) edge -= (row - 3) * 0.015;
+  if (diff === 'extreme' && row > 3) edge -= (row - 3) * 0.02;
+  edge = Math.max(edge, 0.85);
   return Math.round(mult * edge * 100) / 100;
 }
 
@@ -2545,6 +2550,54 @@ const lootboxTypes = [
       { name: 'Mega Jackpot', icon: '🌟', value: 50000, weight: 7 },
       { name: 'Legendary Haul', icon: '🏆', value: 100000, weight: 3 },
       { name: 'ULTRA PRIZE', icon: '🔥', value: 250000, weight: 1 },
+    ]
+  },
+  { id: 'mystic', name: 'Mystic Box', icon: '🔮', price: 15000, rarity: 'Mystic',
+    prizes: [
+      { name: 'Void', icon: '🕳️', value: 0, weight: 16 },
+      { name: 'Arcane Dust', icon: '✨', value: 5000, weight: 22 },
+      { name: 'Mystic Orb', icon: '🔮', value: 15000, weight: 22 },
+      { name: 'Enchanted Gem', icon: '💎', value: 40000, weight: 17 },
+      { name: 'Sorcerer\'s Chest', icon: '🌟', value: 80000, weight: 12 },
+      { name: 'Ancient Relic', icon: '🏆', value: 150000, weight: 7 },
+      { name: 'Mystic Jackpot', icon: '🔥', value: 400000, weight: 3 },
+      { name: 'TRANSCENDENT', icon: '💫', value: 750000, weight: 1 },
+    ]
+  },
+  { id: 'divine', name: 'Divine Box', icon: '⚡', price: 50000, rarity: 'Divine',
+    prizes: [
+      { name: 'Fallen Grace', icon: '💀', value: 0, weight: 15 },
+      { name: 'Holy Fragment', icon: '🪙', value: 15000, weight: 20 },
+      { name: 'Blessed Return', icon: '💰', value: 50000, weight: 22 },
+      { name: 'Sacred Jewel', icon: '💎', value: 125000, weight: 17 },
+      { name: 'Angel\'s Gift', icon: '👼', value: 250000, weight: 13 },
+      { name: 'Divine Halo', icon: '😇', value: 500000, weight: 8 },
+      { name: 'God\'s Bounty', icon: '🏆', value: 1000000, weight: 3.5 },
+      { name: 'DIVINE ASCENSION', icon: '⚡', value: 2500000, weight: 1.5 },
+    ]
+  },
+  { id: 'celestial', name: 'Celestial Box', icon: '🌠', price: 200000, rarity: 'Celestial',
+    prizes: [
+      { name: 'Black Hole', icon: '🕳️', value: 0, weight: 14 },
+      { name: 'Stardust', icon: '✨', value: 60000, weight: 20 },
+      { name: 'Nebula Core', icon: '🌀', value: 200000, weight: 22 },
+      { name: 'Supernova', icon: '💥', value: 500000, weight: 17 },
+      { name: 'Galaxy Shard', icon: '🌌', value: 1000000, weight: 13 },
+      { name: 'Cosmic Crown', icon: '👑', value: 2500000, weight: 8 },
+      { name: 'Celestial Core', icon: '🌟', value: 5000000, weight: 4 },
+      { name: 'BIG BANG', icon: '🔥', value: 10000000, weight: 2 },
+    ]
+  },
+  { id: 'omega', name: 'Omega Box', icon: '☢️', price: 1000000, rarity: 'Omega',
+    prizes: [
+      { name: 'Oblivion', icon: '💀', value: 0, weight: 14 },
+      { name: 'Omega Shard', icon: '🪙', value: 300000, weight: 19 },
+      { name: 'Reality Fragment', icon: '💰', value: 1000000, weight: 22 },
+      { name: 'Infinity Stone', icon: '💎', value: 2500000, weight: 17 },
+      { name: 'Dimension Rift', icon: '🌀', value: 5000000, weight: 13 },
+      { name: 'Omega Crown', icon: '👑', value: 10000000, weight: 8 },
+      { name: 'Universe Key', icon: '🏆', value: 25000000, weight: 4.5 },
+      { name: 'THE OMEGA', icon: '☢️', value: 50000000, weight: 2.5 },
     ]
   }
 ];
@@ -2826,6 +2879,8 @@ function raceStart() {
     r.progress = 0;
     r.finished = false;
     r.finishOrder = 0;
+    // RWD cars each get a random wheelspin recovery point
+    if (r.drivetrain === 'RWD') r._wheelspinRecovery = 10 + Math.random() * 25; // 10-35% progress
   });
   raceState = { ...raceState, racers, bet, active: true, finishCount: 0, interval: null };
   document.getElementById('raceStartBtn').disabled = true;
@@ -2838,6 +2893,7 @@ function raceStart() {
       <div class="lane-bg"></div>
       <div class="lane-name" id="raceName${i}">${r.name}</div>
       ${r.drivetrain === 'RWD' ? `<div class="lane-smoke" id="raceSmoke${i}">💨</div>` : ''}
+      <div class="lane-pos" id="racePos${i}" style="display:none;"></div>
       <div class="lane-car" id="raceCar${i}">${r.isPlayer ? '🏎' : '🚗'}</div>
     </div>`
   ).join('');
@@ -2856,7 +2912,8 @@ function raceStep() {
     // Drivetrain physics: RWD = slow launch + wheelspin, fast mid-race; AWD = fast launch, slightly slower mid
     let dtMult = 1;
     if (r.drivetrain === 'RWD') {
-      if (r.progress < 20) dtMult = 0.65 + Math.random() * 0.15; // wheelspin off the line
+      const recovery = r._wheelspinRecovery || 20;
+      if (r.progress < recovery) dtMult = 0.55 + Math.random() * 0.25; // wheelspin off the line (varies per car)
       else if (Math.random() < 0.015) { dtMult = 0.75; r._spinFlicker = 3; } // rare mid-race wheelspin
       else if (r.progress < 60) dtMult = 1.2; // hooks up and pulls hard
       else dtMult = 1.1;
@@ -2885,6 +2942,14 @@ function raceStep() {
       r.finished = true;
       raceState.finishCount++;
       r.finishOrder = raceState.finishCount;
+      // Show finishing position to the left of the car
+      const posEmojis = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
+      const posEl = document.getElementById('racePos' + i);
+      if (posEl) {
+        posEl.textContent = posEmojis[r.finishOrder - 1] || r.finishOrder;
+        posEl.style.display = 'block';
+        posEl.style.left = `calc(${r.progress}% - 52px)`;
+      }
     }
   });
   if (allDone || racers.every(r => r.finished)) {
@@ -2901,11 +2966,11 @@ function raceFinish() {
   const pos = racers.indexOf(player) + 1;
   const medals = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
   const posLabels = ['1st', '2nd', '3rd', '4th', '5th'];
-  // Payouts: 1st = 3x, 2nd = 1.5x, 3rd = 0.5x refund
+  // Payouts: 1st = 4.5x, 2nd = 2x, 3rd = 1x (break even) — no house edge
   let payout = 0;
-  if (pos === 1) payout = bet * 3;
-  else if (pos === 2) payout = bet * 1.5;
-  else if (pos === 3) payout = Math.round(bet * 0.5 * 100) / 100;
+  if (pos === 1) payout = bet * 4.5;
+  else if (pos === 2) payout = bet * 2;
+  else if (pos === 3) payout = bet;
   const profit = Math.round((payout - bet) * 100) / 100;
   if (payout > 0) updateBalance(payout);
   let posHtml = '<div class="race-positions">';
@@ -2923,9 +2988,9 @@ function raceFinish() {
   posHtml += '</div>';
   let resultClass = pos === 1 ? 'result-win' : pos <= 3 ? 'result-win' : 'result-lose';
   let resultMsg = '';
-  if (pos === 1) resultMsg = `🏆 1st Place! Won £${formatNum(payout)} (3x)`;
-  else if (pos === 2) resultMsg = `🥈 2nd Place! Won £${formatNum(payout)} (1.5x)`;
-  else if (pos === 3) { resultMsg = `🥉 3rd Place. Got £${formatNum(payout)} back`; resultClass = 'result-lose'; }
+  if (pos === 1) resultMsg = `🏆 1st Place! Won £${formatNum(payout)} (4.5x)`;
+  else if (pos === 2) resultMsg = `🥈 2nd Place! Won £${formatNum(payout)} (2x)`;
+  else if (pos === 3) { resultMsg = `🥉 3rd Place. Bet returned!`; resultClass = 'result-push'; }
   else resultMsg = `${posLabels[pos - 1]} Place. Lost £${formatNum(bet)}`;
   document.getElementById('raceResult').innerHTML =
     `<div class="result-display ${resultClass}">${resultMsg}</div>` + posHtml;
@@ -3003,15 +3068,15 @@ const carData = [
     { name: 'Koenigsegg Agera RST', price: 2000000, hp: 1360, torque: 1011, weight: 1395 },
     { name: 'Bugatti Chiron Super Sport', price: 2200000, hp: 1578, torque: 1180, weight: 1995 },
     { name: 'Koenigsegg Jesko Attack', price: 3000000, hp: 1600, torque: 1106, weight: 1420 },
-    { name: 'Bugatti Mistral', price: 3200000, hp: 1578, torque: 1180, weight: 1995 },
+    { name: 'Bugatti Mistral', price: 3200000, hp: 1678, torque: 1180, weight: 1995 },
     { name: 'Koenigsegg Jesko Absolut', price: 3500000, hp: 1600, torque: 1106, weight: 1420 },
   ]},
   { class: 'Megacars / Track', color: '#f44336', cars: [
     { name: 'McLaren P1 GTR', price: 3500000, hp: 986, torque: 664, weight: 1390 },
     { name: 'Koenigsegg Agera One:1', price: 5000000, hp: 1341, torque: 1011, weight: 1360 },
-    { name: 'Bugatti Tourbillon', price: 6000000, hp: 1800, torque: 1200, weight: 1995 },
+    { name: 'Bugatti Tourbillon', price: 6000000, hp: 1800, torque: 1200, weight: 1800 },
     { name: 'Bugatti Bolide', price: 7000000, hp: 1824, torque: 1364, weight: 1450 },
-    { name: "Koenigsegg Jesko Sadair's Spear", price: 8000000, hp: 1750, torque: 1206, weight: 1420 },
+    { name: "Koenigsegg Jesko Sadair's Spear", price: 8000000, hp: 1700, torque: 1206, weight: 1420 },
   ]},
   { class: 'Exclusive', color: '#440E03', cars: [
     { name: 'Hennessey Venom GT', price: 1200000, hp: 1244, torque: 1155, weight: 1244 },
