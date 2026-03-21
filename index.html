@@ -206,6 +206,10 @@ main{flex:1;padding:24px;overflow-y:auto;max-height:calc(100vh - 60px);}
 /* Dealership */
 .dealer-section{margin-bottom:32px;}
 .dealer-section h2{color:var(--accent);font-size:1.2em;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+.dealer-sort-bar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+.dealer-sort-bar label{color:var(--muted);font-size:0.9em;}
+.dealer-sort-bar select{background:var(--card);border:1px solid var(--border);color:var(--text);padding:6px 12px;border-radius:8px;font-size:0.9em;cursor:pointer;}
+.dealer-sort-bar select:focus{outline:none;border-color:var(--accent);}
 .car-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;}
 .car-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;transition:all .2s;}
 .car-card:hover{border-color:var(--accent);box-shadow:0 4px 20px rgba(240,192,64,0.1);}
@@ -2791,7 +2795,7 @@ function kenoDraw() {
 // ============== STREET RACE ==============
 let raceState = {};
 
-const rwdNames = ['M4 CSL', '720S', '765LT', 'Senna', 'P1', '488 Pista', 'LaFerrari', 'Agera', 'One:1', 'Jesko', 'Spear', 'GT3 RS', 'Brabus Rocket', 'CLE 63s'];
+const rwdNames = ['M4 CSL', '720S', '765LT', 'Senna', 'P1', '488 Pista', 'LaFerrari', 'Agera', 'One:1', 'Jesko', 'Spear', 'GT3 RS', 'Brabus Rocket', 'CLE 63s', 'Huayra R', 'FXX-K Evo', '296 GTB', 'Zonda R', 'Huayra', 'Speedtail', 'Monza SP2', 'Zonda Clinque'];
 function getDrivetrain(name, cls) {
   if (cls === 'Economy') return 'FWD';
   if (rwdNames.some(p => name.includes(p))) return 'RWD';
@@ -2862,6 +2866,7 @@ function raceStart() {
   if (!raceState.selectedCar) { showToast('Select a car first!', 'lose'); return; }
   const bet = getBetAmount();
   if (!bet) return;
+  if (bet > 1000000) { showToast('Max bet for Street Racing is £1,000,000!', 'lose'); return; }
   updateBalance(-bet);
   const playerCar = raceState.selectedCar;
   const rivals = raceGetRivals(playerCar);
@@ -2966,9 +2971,9 @@ function raceFinish() {
   const pos = racers.indexOf(player) + 1;
   const medals = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
   const posLabels = ['1st', '2nd', '3rd', '4th', '5th'];
-  // Payouts: 1st = 4.5x, 2nd = 2x, 3rd = 1x (break even) — no house edge
+  // Payouts: 1st = 3x, 2nd = 2x, 3rd = 1x (break even) — no house edge
   let payout = 0;
-  if (pos === 1) payout = bet * 4.5;
+  if (pos === 1) payout = bet * 3;
   else if (pos === 2) payout = bet * 2;
   else if (pos === 3) payout = bet;
   const profit = Math.round((payout - bet) * 100) / 100;
@@ -2988,7 +2993,7 @@ function raceFinish() {
   posHtml += '</div>';
   let resultClass = pos === 1 ? 'result-win' : pos <= 3 ? 'result-win' : 'result-lose';
   let resultMsg = '';
-  if (pos === 1) resultMsg = `🏆 1st Place! Won £${formatNum(payout)} (4.5x)`;
+  if (pos === 1) resultMsg = `🏆 1st Place! Won £${formatNum(payout)} (3x)`;
   else if (pos === 2) resultMsg = `🥈 2nd Place! Won £${formatNum(payout)} (2x)`;
   else if (pos === 3) { resultMsg = `🥉 3rd Place. Bet returned!`; resultClass = 'result-push'; }
   else resultMsg = `${posLabels[pos - 1]} Place. Lost £${formatNum(bet)}`;
@@ -3035,6 +3040,7 @@ const carData = [
     { name: 'Mercedes AMG CLE 63s', price: 115000, hp: 585, torque: 553, weight: 1890 },
     { name: 'BMW M5 CS', price: 130000, hp: 530, torque: 553, weight: 1825 },
     { name: 'Audi R8', price: 140000, hp: 562, torque: 406, weight: 1670 },
+    { name: 'BMW M8 Competition', price: 145000, hp: 617, torque: 553, weight: 2010 },
     { name: 'Porsche 911 GT3 RS', price: 170000, hp: 518, torque: 346, weight: 1450 },
     { name: 'Aston Martin V12 Vanquish', price: 330000, hp: 810, torque: 1015, weight: 1900},
     { name: 'Brabus Rocket GTS', price: 350000, hp: 900, torque: 774, weight: 2150 },
@@ -3057,9 +3063,11 @@ const carData = [
     { name: 'Ferrari SF90 Stradale', price: 380000, hp: 986, torque: 590, weight: 1570 },
     { name: 'Lamborghini Revuelto', price: 420000, hp: 1001, torque: 535, weight: 1772 },
     { name: 'McLaren Senna', price: 750000, hp: 789, torque: 590, weight: 1198 },
+    { name: 'Ferrari 296 GTB', price: 320000, hp: 819, torque: 546, weight: 1470 },
+    { name: 'Porsche 911 GT2 RS', price: 340000, hp: 700, torque: 553, weight: 1470 },
   ]},
   { class: 'Hypercars', color: '#9c27b0', cars: [
-    { name: 'Chevrolet Corvette ZR1', price: 850000, hp: 1064, torque: 828, weight: 1610 },
+    { name: 'Koenigsegg Regera', price: 900000, hp: 1500, torque: 2000, weight: 1628 },
     { name: 'Koenigsegg Agera R', price: 1000000, hp: 1140, torque: 885, weight: 1435 },
     { name: 'McLaren P1', price: 1100000, hp: 903, torque: 664, weight: 1395 },
     { name: 'Porsche 918 Spyder', price: 1200000, hp: 887, torque: 944, weight: 1674 },
@@ -3072,9 +3080,17 @@ const carData = [
     { name: 'Koenigsegg Jesko Absolut', price: 3500000, hp: 1600, torque: 1106, weight: 1420 },
   ]},
   { class: 'Megacars / Track', color: '#f44336', cars: [
+    { name: 'Aston Martin Valkyrie', price: 3200000, hp: 1160, torque: 740, weight: 1030 },
     { name: 'McLaren P1 GTR', price: 3500000, hp: 986, torque: 664, weight: 1390 },
+    { name: 'Mercedes-AMG One', price: 3500000, hp: 1063, torque: 742, weight: 1275 },
+    { name: 'Ferrari SF90XX', price: 4000000, hp: 1030, torque: 590, weight: 1470 },
+    { name: 'Aston Martin Valkyrie AMR Pro', price: 4200000, hp: 1176, torque: 740, weight: 1000 },
+    { name: 'Rimac Nevera', price: 4500000, hp: 1914, torque: 2360, weight: 2150 },
+    { name: 'Lamborghini Essenza SCV12', price: 4800000, hp: 830, torque: 538, weight: 1090 },
     { name: 'Koenigsegg Agera One:1', price: 5000000, hp: 1341, torque: 1011, weight: 1360 },
+    { name: 'Ferrari FXX-K Evo', price: 5500000, hp: 1036, torque: 750, weight: 1165 },
     { name: 'Bugatti Tourbillon', price: 6000000, hp: 1800, torque: 1200, weight: 1800 },
+    { name: 'Pagani Huayra R', price: 6500000, hp: 850, torque: 750, weight: 1050 },
     { name: 'Bugatti Bolide', price: 7000000, hp: 1824, torque: 1364, weight: 1450 },
     { name: "Koenigsegg Jesko Sadair's Spear", price: 8000000, hp: 1700, torque: 1206, weight: 1420 },
   ]},
@@ -3082,7 +3098,14 @@ const carData = [
     { name: 'Hennessey Venom GT', price: 1200000, hp: 1244, torque: 1155, weight: 1244 },
     { name: 'Pagani Zonda R', price: 1800000, hp: 740, torque: 524, weight: 1070 },
     { name: 'Apollo IE Emozione', price: 2600000, hp: 761, torque: 601, weight: 1501 },
+    { name: 'Pagani Huayra BC', price: 2800000, hp: 791, torque: 774, weight: 1218 },
+    { name: 'Hennessey Venom F5', price: 3000000, hp: 1817, torque: 1193, weight: 1360 },
     { name: 'Lamborghini Veneno', price: 4000000, hp: 740, torque: 872, weight: 1763 },
+    { name: 'Lamborghini Sian FKP 37', price: 4200000, hp: 819, torque: 531, weight: 1472 },
+    { name: 'Aston Martin Vulcan', price: 4500000, hp: 820, torque: 580, weight: 1350 },
+    { name: 'Ferrari Monza SP2', price: 5000000, hp: 810, torque: 530, weight: 1500 },
+    { name: 'McLaren Speedtail', price: 5500000, hp: 1055, torque: 848, weight: 1430 },
+    { name: 'Pagani Zonda Cinque', price: 6000000, hp: 678, torque: 575, weight: 1210 },
   ]}
 ];
 
@@ -3108,13 +3131,25 @@ const houseData = [
   { name: 'Private Island Estate', price: 25000000, icon: '🏝️', desc: 'Your own private paradise' },
 ];
 
+let dealerSort = 'default';
+
 function renderDealership() {
   const el = document.getElementById('dealershipTab');
   let html = '<div class="dealer-tabs" id="dealerTabs">' +
     '<button class="dealer-tab active" onclick="dealerShowSection(\'cars\', this)">🚗 Cars</button>' +
     '<button class="dealer-tab" onclick="dealerShowSection(\'houses\', this)">🏠 Houses</button>' +
     '</div>';
-  html += '<div id="dealerCars">' + renderCarDealership() + '</div>';
+  html += '<div id="dealerCars">' +
+    '<div class="dealer-sort-bar">' +
+    '<label>Sort by:</label>' +
+    '<select onchange="dealerSort=this.value;document.getElementById(\'dealerCarList\').innerHTML=renderCarDealership();">' +
+    '<option value="default"' + (dealerSort==='default'?' selected':'') + '>Default (Class)</option>' +
+    '<option value="price-desc"' + (dealerSort==='price-desc'?' selected':'') + '>Price: High to Low</option>' +
+    '<option value="price-asc"' + (dealerSort==='price-asc'?' selected':'') + '>Price: Low to High</option>' +
+    '<option value="hp-desc"' + (dealerSort==='hp-desc'?' selected':'') + '>Horsepower: High to Low</option>' +
+    '<option value="hp-asc"' + (dealerSort==='hp-asc'?' selected':'') + '>Horsepower: Low to High</option>' +
+    '</select></div>' +
+    '<div id="dealerCarList">' + renderCarDealership() + '</div></div>';
   html += '<div id="dealerHouses" style="display:none">' + renderHouseDealership() + '</div>';
   el.innerHTML = html;
 }
@@ -3127,6 +3162,38 @@ function dealerShowSection(section, el) {
 }
 
 function renderCarDealership() {
+  if (dealerSort !== 'default') {
+    const allCars = [];
+    carData.forEach(cat => cat.cars.forEach(car => allCars.push({ ...car, class: cat.class, color: cat.color })));
+    if (dealerSort === 'price-desc') allCars.sort((a, b) => b.price - a.price);
+    else if (dealerSort === 'price-asc') allCars.sort((a, b) => a.price - b.price);
+    else if (dealerSort === 'hp-desc') allCars.sort((a, b) => b.hp - a.hp);
+    else if (dealerSort === 'hp-asc') allCars.sort((a, b) => a.hp - b.hp);
+    return `<div class="dealer-section"><h2>All Cars</h2><div class="car-grid">${allCars.map(car => {
+      const owned = state.ownedItems.some(i => i.type === 'car' && i.name === car.name);
+      const canAfford = state.balance >= car.price;
+      const dt = getDrivetrain(car.name, car.class);
+      const dtColor = dt === 'RWD' ? '#e53935' : dt === 'AWD' ? '#43a047' : '#1e88e5';
+      return `<div class="car-card">
+        <span class="car-class-tag" style="background:${car.color}22;color:${car.color};border:1px solid ${car.color}44;">${car.class}</span>
+        <span class="car-class-tag" style="background:${dtColor}22;color:${dtColor};border:1px solid ${dtColor}44;margin-left:6px;">${dt}</span>
+        <div class="car-name">${car.name}</div>
+        <div class="car-specs">
+          <span class="car-spec">🐎 ${car.hp} HP</span>
+          <span class="car-spec">⚡ ${car.torque} Nm</span>
+          <span class="car-spec">⚖️ ${car.weight} kg</span>
+        </div>
+        <div class="car-price">£${car.price.toLocaleString()}</div>
+        ${owned ?
+          '<button class="buy-btn owned" disabled>✓ Owned</button>' :
+          `<button class="buy-btn ${canAfford ? 'can-buy' : 'cant-buy'}" ${canAfford ? '' : 'disabled'}
+            onclick="buyItem('car','${car.name.replace(/'/g, "\\'")}',${car.price},'${car.class}',${car.hp},${car.torque},${car.weight})">
+            ${canAfford ? 'Buy' : 'Can\'t Afford'}
+          </button>`
+        }
+      </div>`;
+    }).join('')}</div></div>`;
+  }
   return carData.map(cat =>
     `<div class="dealer-section">
       <h2><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${cat.color};margin-right:8px;"></span>${cat.class}</h2>
